@@ -56,6 +56,14 @@ abstract public class BasePublicAPIExample {
         Session cmisSession = getCmisSession();
         Folder rootFolder = (Folder) cmisSession.getObject(parentFolderId);
 
+        if (folderName.contains("/")) {
+            for (String subFolderName : folderName.split("/")) {
+                rootFolder = createFolder(parentFolderId, subFolderName);
+                parentFolderId = rootFolder.getId();
+            }
+            return rootFolder;
+        }
+        
         Folder subFolder = null;
         try {
             // Making an assumption here that you probably wouldn't normally do
